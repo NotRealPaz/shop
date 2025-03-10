@@ -1,0 +1,12 @@
+{
+	"type": "module",
+	"scripts": {
+		"build": "bun build --compile --minify --sourcemap --bytecode src/server.ts --outfile executable"
+	},
+	"dependencies": {
+		"elysia": "^1.2.25"
+	},
+	"devDependencies": {
+		"@types/bun": "^1.2.4"
+	}
+}
