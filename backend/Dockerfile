@@ -24,4 +24,6 @@ WORKDIR /app
 RUN apk add libgcc libstdc++
 COPY --from=prerelease /app/executable .
 
+EXPOSE 3000/tcp
+
 ENTRYPOINT [ "./executable" ]
