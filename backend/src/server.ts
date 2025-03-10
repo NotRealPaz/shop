@@ -11,6 +11,8 @@ const app = new Elysia()
 			name: t.String(),
 		}),
 	})
-	.listen(3000);
+	.listen(3000, ({ hostname, port }) => {
+		console.log(`🦊 Elysia is running at ${hostname}:${port}`);
+	});
 
 export type App = typeof app;
