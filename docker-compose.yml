@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    networks:
+      - my_network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-default_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-default_password}
+      - POSTGRES_DB=${POSTGRES_DB:-app_db}
+
+    health_check:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  backend:
+    build: ./backend
+    depends_on:
+      - db
+      - my_network
+    environment:
+      - DB_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${DB_PORT}/${POSTGRES_DB}
+
+    health_check:
+      test: ["CMD-SHELL", "curl -s http://localhost:5000/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "127.0.0.1:5432:5432"
+    depends_on:
+      - backend
+      - my_network
+    environment:
+      - API_URL=http://backend/api
+
+    health_check:
+      test: ["CMD-SHELL", "curl -s http://localhost:3000/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  db_data:
+
+networks:
+  my_network:
