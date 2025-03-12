@@ -1,6 +1,7 @@
 {
 	"type": "module",
 	"scripts": {
+		"dev": "bun --watch src/server.ts",
 		"build": "bun build --compile --minify --sourcemap --bytecode src/server.ts --outfile executable"
 	},
 	"dependencies": {
